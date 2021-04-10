@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务日历展示</title>
+</head>
+<body>
+<form action="/show_calendar/" method="post">
+    <select name="select_year">
+        {% for year in year_selections %}
+            <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}
+    </select>
+    <select name="select_month">
+        {% for month in month_selections %}
+            <option value="{{ month }}">{{ month }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="查看">
+</form>
+
+
+<p style="font-size: 20px"><a href="/show_calendar/">today: {{ today_date }}{{today}}</a></p>
+<table>
+    <tr>
+        <th>周一&nbsp;</th>
+        <th>周二&nbsp;</th>
+        <th>周三&nbsp;</th>
+        <th>周四&nbsp;</th>
+        <th>周五&nbsp;</th>
+        <th>周六&nbsp;</th>
+        <th>周日&nbsp;</th>
+    </tr>
+    <tr>
+        {% for day_info in days_list %}
+            {% if day_info.index % 7 == 0 %}
+                <tr></tr>
+            {% endif %}
+            {% if day_info.day == 0 %}
+                <td>&nbsp;&nbsp;</td>
+            {% else %}
+                {% if day_info.day == show_today %}
+                    <td><a href="/note_show/{{show_year_month}}{{ day_info.day }}" style="font-size:35px; color:green">{{ day_info.day }}</a>
+                    <a href="/add/{{show_year_month}}{{ day_info.day }}" target="_blank" style="font-size:10px; color:green">add</a></td>
+                {% elif day_info.is_note_day %}
+                    <td><a href="/note_show/{{show_year_month}}{{ day_info.day }}" style="font-size:30px; color:firebrick">{{ day_info.day }}</a>
+                    <a href="/add/{{show_year_month}}{{ day_info.day }}" target="_blank" style="font-size:10px; color:firebrick">add</a></td>
+                {% else %}
+                    <td><a href="/note_show/{{show_year_month}}{{ day_info.day }}" style="font-size:30px; color:darkgrey;">{{ day_info.day }}</a>
+                        <a href="/add/{{show_year_month}}{{ day_info.day }}" target="_blank" style="font-size:10px; color:darkgrey">add</a></td>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>
+<br>
+{% for message in get_flashed_messages() %}
+    {% for m in message %}
+        <div style="color: red">{{ m }}</div>
+    {% endfor %}
+{% endfor %}
+
+
+<script type="text/javascript">
+    function selectTotal(obj){
+        window.location.href="#";
+    }
+ $(document).ready(function (e){
+     if("${pageTotal }"){                                   //重点是这个判断
+         $("option[value='${pageTotal }']").attr("selected",true);
+     }else{
+         $("option[value='2021']").attr("selected",true);
+     }
+ });
+</script>
+
+</body>
+</html>
