@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div align="center">
+    <div><label>欢迎脑子不好使童鞋......</label></div>
+    <br>
+    <form action="/">
+        <div>
+            <label for="username">username: </label>
+            <input type="text" name="username" required="required">
+        </div>
+        <br>
+        <div>
+            <label for="password1">password: </label>
+            <input type="password1" name="password1" required="required">
+        </div>
+        <br>
+        <div>
+            <label for="password2">password: </label>
+            <input type="password2" name="password2" required="required">
+        </div>
+        <br>
+        <div><input type="submit" value="注册/进入"></div>
+    </form>
+</div>
+<div align="center"><p style="color: red">
+    {% if error_message %}
+        {{ error_message }}
+    {% endif %}
+</p></div>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+database_name = "calendar_notes.sqlite3"
+notes_table_name = "notes"
+users_table_name = "users"
+create_notes_sql = "CREATE TABLE IF NOT EXISTS 'notes' (id integer primary key autoincrement not null, date text, note text);"
+create_users_sql = "create table users (id integer primary key autoincrement not null, username text not null, password text not null);"

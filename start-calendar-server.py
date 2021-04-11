@@ -34,5 +34,5 @@ def restart_server(server_name, start_command):
 
 if __name__ == '__main__':
     server_name = "calendar_server"
-    start_command = "nohup python3 calendar_server.py 2>&1 &"
+    start_command = "nohup python3 pub_calendar.py 2>&1 &"
     restart_server(restart_server, start_command)
