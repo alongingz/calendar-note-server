@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, Blueprint
+from flask import render_template, request, flash, redirect, Blueprint
 
 from locallib.about_time import AboutTime
 from locallib.database_sqlite3 import PubNote
