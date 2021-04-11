@@ -8,7 +8,11 @@ app = Flask(__name__)
 app.secret_key = 'nihsiwodexiaoyaxiaopingguo'
 
 
+# sqlite3数据增删改查
 class Sqlite3Excute:
+    """
+    CREATE TABLE IF NOT EXISTS 'notes' (id integer primary key autoincrement not null, date text, note text);
+    """
     def __init__(self):
         self.cnn = sqlite3.connect(database="calendar_notes.sqlite3")
         self.cur = self.cnn.cursor()
@@ -20,8 +24,7 @@ class Sqlite3Excute:
 
     def get_note(self, date):
         try:
-            print("select note from {} where date={};".format(self.table, date))
-            res = self.cur.execute("select note from {} where date='{}';".format(self.table, date))
+            res = self.cur.execute("select date, note from {} where date='{}';".format(self.table, date))
             return res.fetchall()
         except Exception as e:
             self.cnn.rollback()
@@ -71,25 +74,26 @@ class AboutTime:
         return now_time
 
 
-# 日历提醒功能
+# 根据指定年，月获取当月展示数据列表
 def get_calendar_show(year, month):
     first_day_weekday = datetime.datetime(year=year, month=month, day=1).isoweekday()  # 本月1号是周几
     this_month_lenth = calendar.monthrange(year=year, month=month)[-1]  # 指定月份有多少天
-    days_list = []
+    days_list = []  # 以周为单位的展示列表
     ini_index = 0
-    l = [day for day in range(1, this_month_lenth + 1)]  # 本月天数列表
+    l = [day for day in range(1, this_month_lenth + 1)]  # 本月天数列表  [1,2,3,...,28/29/30/31]
+    # 当月1号不是周一，将本周前几天补充为day=0
     if first_day_weekday != 1:
         for i in range(1, first_day_weekday):
             days_list.append({"index": ini_index, "year": year, "month": month, "day": 0})
             ini_index += 1
+    # 将本月实际天数添加到一周为单位的展示列表内
     for day in l:
         days_list.append({"index": ini_index, "year": year, "month": month, "day": day})
         ini_index += 1
-    # print(days_list)
     return days_list, year, month
 
 
-# 将当月日期添加是否有note记录
+# 查询已有备忘，将指定年月的每一天添加是否有备忘记录
 def get_calendar_show_add_noteday(year, month):
     days_list, year, month = get_calendar_show(year, month)
     noted_days_list = list(Sqlite3Excute().filter_date())
@@ -163,14 +167,13 @@ def calendar_add_note(notedate):
     :return: 有message就flask，没有就刷新日历页面 /show_calendar/
     """
     notesday = []
-    now_year, now_month, today = str(notedate).split("-")
-    notes_all = Sqlite3Excute().get_all()
-    for date, note in notes_all:
-        year, month, day = str(date).split("-")
-        if now_year == year and now_month == month and today == day:
-            notesday.append(note)
+    the_year, the_month, the_day = str(notedate).split("-")
+    result = Sqlite3Excute().get_note(date=notedate)
+    print(result)
+    for notes_theday, notes in result:
+        notesday.append({"date": notes_theday, "note": notes})
     flash(message=notesday)
-    show_month = now_year + "-" + now_month
+    show_month = the_year + "-" + the_month
     return redirect("/show_calendar/{}".format(show_month))
 
 
@@ -181,12 +184,6 @@ def calendar_add(notedate):
         Sqlite3Excute().insert_note(date=notedate, note=note)
         return redirect("/show_calendar/{}".format(notedate.split("-")[0] + "-" + notedate.split("-")[1]))
     return render_template("note_add.html", notedate=notedate)
-
-
-# @app.route("/1/", methods=['POST', 'GET'])
-# def demo1():
-#     res = Sqlite3Excute().filter_date()
-#     return str(res)
 
 
 if __name__ == '__main__':
