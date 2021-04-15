@@ -55,24 +55,13 @@
 </table>
 <br>
 {% for message in get_flashed_messages() %}
-    {% for m in message %}
-        <div style="color: red">{{ m }}</div>
+    {% for note in message %}
+        <div style="color: red">{{ note.note }} <a href="/pub/change_note/{{note.date}}-{{note.noteid}}">修改</a></div>
     {% endfor %}
 {% endfor %}
 
 
-{#<script type="text/javascript">#}
-{#    function selectTotal(obj){#}
-{#        window.location.href="#";#}
-{#    }#}
-{# $(document).ready(function (e){#}
-{#     if("${pageTotal }"){                                   //重点是这个判断#}
-{#         $("option[value='${pageTotal }']").attr("selected",true);#}
-{#     }else{#}
-{#         $("option[value='2021']").attr("selected",true);#}
-{#     }#}
-{# });#}
-{#</script>#}
+
 
 </body>
 </html>

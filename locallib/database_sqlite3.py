@@ -20,7 +20,14 @@ class PubNote:
 
     def get_note(self, date):
         try:
-            res = self.cur.execute("select date, note from {} where date='{}';".format(self.table, date))
+            res = self.cur.execute("select id, date, note from {} where date='{}';".format(self.table, date))
+            return res.fetchall()
+        except Exception as e:
+            self.cnn.rollback()
+
+    def get_note_by_id(self, noteid):
+        try:
+            res = self.cur.execute("select id, date, note from {} where id={};".format(self.table, int(noteid)))
             return res.fetchall()
         except Exception as e:
             self.cnn.rollback()
@@ -33,10 +40,10 @@ class PubNote:
         except Exception as e:
             self.cnn.rollback()
 
-    def update_note(self, date, old_note, new_note):
+    def update_note(self, noteid, new_note):
         try:
             self.cur.execute(
-                "update {} set note='{}' where date='{}' and note='{}';".format(self.table, new_note, date, old_note))
+                "update {} set note='{}' where id={};".format(self.table, new_note, int(noteid)))
             self.cnn.commit()
         except Exception as e:
             self.cnn.rollback()
