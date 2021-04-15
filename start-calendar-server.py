@@ -3,7 +3,7 @@ import time
 
 
 def status_server(server_name):
-    server_pid = os.popen("pgrep -f %" % server_name)
+    server_pid = os.popen("pgrep -f {}".format(server_name))
     if server_pid:
         return server_pid
     return False
@@ -14,7 +14,7 @@ def start_server(start_command):
 
 
 def stop_server(server_name):
-    os.popen("pkill -f %" % server_name)
+    os.popen("pkill -f {}".format(server_name))
 
 
 def restart_server(server_name, start_command):
