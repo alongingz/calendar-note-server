@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='mao.ico') }}">
+</head>
+<body>
+
+<!--{#{% macro render_field(field) %} &lt;!&ndash; 定义字段宏 &ndash;&gt;#}-->
+<!--{#    <dt>{{ field.label }}:#}-->
+<!--{#    <dd>{{ field(**kwargs)|safe }}#}-->
+<!--{#        {% if field.errors %}#}-->
+<!--{#            <ul class=errors>#}-->
+<!--{#                {% for error in field.errors %}#}-->
+<!--{#                    <li>{{ error }}</li>#}-->
+<!--{#                {% endfor %}#}-->
+<!--{#            </ul>#}-->
+<!--{#        {% endif %}#}-->
+<!--{#    </dd>#}-->
+<!--{#{% endmacro %}#}-->
+
+<a href="{{ url_for('auth.register') }}">注册</a>
+<!-- 登录表单 -->
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.username.label }}{{ form.username }}<br>
+    {{ form.password.label }}{{ form.password }}<br>
+    {% if emsg %}  <!-- 如果有错误信息 则显示 -->
+        <h3> {{ emsg }}</h3>
+    {% endif %}
+    <input type="submit" value="登录">
+</form>
+
+</body>
+</html>

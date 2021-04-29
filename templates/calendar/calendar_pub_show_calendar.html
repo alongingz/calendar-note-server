@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>任务日历展示</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='mao.ico') }}">
 </head>
 <body>
 <form action="/pub/show_calendar/" method="post">
@@ -56,7 +57,9 @@
 <br>
 {% for message in get_flashed_messages() %}
     {% for note in message %}
+        {% if note.note %}
         <div style="color: red">{{ note.note }} <a href="/pub/change_note/{{note.date}}-{{note.noteid}}">修改</a></div>
+        {% endif %}
     {% endfor %}
 {% endfor %}
 

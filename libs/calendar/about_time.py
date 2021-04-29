@@ -3,21 +3,23 @@ import datetime
 import calendar
 
 
-# 封装关于时间的方法
-from locallib.database_sqlite3 import PubNote
-
-
 class AboutTime:
-    def now_year_month_day(self):
+    def get_today_year_month(self):
+        now_year, now_month, now_day = AboutTime().get_today_year_month_day()
+        today_year_month = str(now_year) + "-" + str(now_month)  # 年份月份格式
+        return today_year_month
+
+    def get_today_year_month_day(self):
         now_year, now_month, now_day = time.localtime().tm_year, time.localtime().tm_mon, time.localtime().tm_mday  # 当前年月日
         return now_year, now_month, now_day
 
-    def now_time(self):
+    def get_now_time(self):
         now_time = datetime.datetime.now()
         return now_time
 
     # 根据指定年，月获取当月展示数据列表
     def get_calendar_show(self, year, month):
+        year, month = int(year), int(month)
         first_day_weekday = datetime.datetime(year=year, month=month, day=1).isoweekday()  # 本月1号是周几
         this_month_lenth = calendar.monthrange(year=year, month=month)[-1]  # 指定月份有多少天
         days_list = []  # 以周为单位的展示列表
@@ -34,25 +36,13 @@ class AboutTime:
             ini_index += 1
         return days_list, year, month
 
-    # 查询已有备忘，将指定年月的每一天添加是否有备忘记录
-    def get_calendar_show_add_noteday(self, year, month):
-        days_list, year, month = self.get_calendar_show(year, month)
-        noted_days_list = list(PubNote().filter_date())
-        # 先将本月所有天数 设置为无备忘状态
-        for d in days_list:
-            d['is_note_day'] = False
-        # 指定年月日有数据时，才更改状态
-        for ds in noted_days_list:
-            for items in days_list:
-                if items['year'] == int(ds.split("-")[0]) and items['month'] == int(ds.split("-")[1]) and \
-                        items['day'] == int(ds.split("-")[-1]):
-                    items['is_note_day'] = True
-        return days_list, year, month
 
-
-
-
-
+if __name__ == '__main__':
+    a = AboutTime()
+    print(a.get_now_time())
+    print(a.get_today_year_month())
+    print(a.get_today_year_month_day())
+    print(a.get_calendar_show(year=2021, month=4))
 
 
 

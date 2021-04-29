@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改备注</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='mao.ico') }}">
+</head>
+<body>
+    <div>
+        <form action="/pub/save_new_note/{{note_date}}-{{noteid}}/" method="post">
+            <label for="">当前备注：&nbsp;</label>
+            <input type="text" value="{{ note_info }}"><br>
+            <label for="new_note">新备注：&nbsp;</label>
+            <textarea name="new_note" id="note" cols="30" rows="10"></textarea>
+            <input type="submit" value="修改">
+        </form>
+    </div>
+
+</body>
+</html>
